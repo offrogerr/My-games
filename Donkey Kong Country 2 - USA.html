@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Donkey Kong Country 2   USA</title>
+
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #000;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ===== AJUSTE DOS BOTÕES OVERLAY ===== */
+
+/* Select */
+.ejs-select {
+  position: absolute !important;
+  bottom: 90px !important;
+  left: 20px !important;
+}
+
+/* Start */
+.ejs-start {
+  position: absolute !important;
+  bottom: 50px !important;
+  left: 20px !important;
+}
+
+/* Rápido */
+.ejs-fast-forward {
+  position: absolute !important;
+  bottom: 90px !important;
+  right: 20px !important;
+}
+
+/* Lento */
+.ejs-slow-motion {
+  position: absolute !important;
+  bottom: 50px !important;
+  right: 20px !important;
+}
+</style>
+</head>
+
+<body>
+
+<div id="game"></div>
+
+<script>
+  window.EJS_player = "#game";
+  window.EJS_core = "snes";
+  window.EJS_gameUrl = "roms/Donkey Kong Country 2 - USA.smc";
+  window.EJS_pathtodata = "emulatorjs/data/";
+</script>
+
+<script src="emulatorjs/loader.js"></script>
+
+</body>
+</html>

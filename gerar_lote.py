@@ -24,7 +24,8 @@ def titulo_amigavel(nome):
     nome = nome.replace("-", " ").replace("_", " ")
     return nome.strip()
 
-def encontrar_thumb(base):
+def encontrar_thumb_por_html(html):
+    base = os.path.splitext(html)[0]
     if os.path.exists(f"{THUMBS}/{base}.png"):
         return f"{base}.png"
     if os.path.exists(f"{THUMBS}/{base}.jpg"):
@@ -32,9 +33,8 @@ def encontrar_thumb(base):
     for d in DEFAULTS:
         if os.path.exists(f"{THUMBS}/{d}"):
             return d
-    return ""
+    return DEFAULTS[0]
 
-# Carrega index e template
 with open(INDEX, "r", encoding="utf-8") as f:
     index = f.read()
 
@@ -46,13 +46,12 @@ for rom in os.listdir(ROMS):
     if ext not in CORES:
         continue
 
-    base = os.path.splitext(rom)[0]
-    html = f"{base}.html"
+    base_rom = os.path.splitext(rom)[0]
+    html = f"{base_rom}.html"
     titulo = titulo_amigavel(rom)
     core = CORES[ext]
-    thumb = encontrar_thumb(base)
 
-    # 1) HTML — cria apenas se não existir
+    # 1) HTML — cria só se não existir
     if not os.path.exists(html):
         conteudo = (
             template.replace("{{TITULO}}", titulo)
@@ -62,27 +61,25 @@ for rom in os.listdir(ROMS):
         with open(html, "w", encoding="utf-8") as f:
             f.write(conteudo)
 
-    # 2) INDEX — âncora única = href
-    href_token = f'href="{html}"'
+    thumb = encontrar_thumb_por_html(html)
+    href = f'href="{html}"'
 
-    if href_token in index:
-        # Card já existe → só troca imagem se for default
+    if href in index:
         img_regex = re.compile(
-            rf'({href_token}[\s\S]*?<img src="thumbs/)([^"]+)(")',
+            rf'({href}[\s\S]*?<img\s+[^>]*src="thumbs/)([^"]+)',
             re.IGNORECASE
         )
 
         match = img_regex.search(index)
         if match:
             atual = match.group(2)
-            if atual in DEFAULTS and thumb and atual != thumb:
+            if atual in DEFAULTS and thumb not in DEFAULTS:
                 index = (
                     index[:match.start(2)] +
                     thumb +
                     index[match.end(2):]
                 )
     else:
-        # Card NÃO existe → cria (imagem + texto clicáveis)
         card = f"""
   <div class="card">
     <a href="{html}" class="card-link">
@@ -96,8 +93,7 @@ for rom in os.listdir(ROMS):
             card + "\n  <!-- JOGOS_AQUI -->"
         )
 
-# Salva index uma única vez
 with open(INDEX, "w", encoding="utf-8") as f:
     f.write(index)
 
-print("=== LOTE EXECUTADO (IMAGEM E TEXTO CLICÁVEIS) ===")
+print("=== LOTE EXECUTADO (THUMB BASEADA NO HTML) ===")
