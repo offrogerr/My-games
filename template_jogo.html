@@ -15,7 +15,9 @@ html, body {
   overflow: hidden;
 }
 
-/* ===== AJUSTE DOS BOTÕES OVERLAY ===== */
+/* ==============================
+   AJUSTE DOS BOTÕES OVERLAY
+   ============================== */
 
 /* Select */
 .ejs-select {
@@ -44,6 +46,18 @@ html, body {
   bottom: 50px !important;
   right: 20px !important;
 }
+
+/* ==============================
+   CORREÇÃO BOTÃO TELA CHEIA
+   ============================== */
+
+.ejs-fullscreen {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  z-index: 9999 !important;
+  display: block !important;
+}
 </style>
 </head>
 
@@ -56,6 +70,7 @@ html, body {
   window.EJS_core = "{{CORE}}";
   window.EJS_gameUrl = "roms/{{ROM}}";
   window.EJS_pathtodata = "emulatorjs/data/";
+  window.EJS_fullscreen = true;
 </script>
 
 <script src="emulatorjs/loader.js"></script>
